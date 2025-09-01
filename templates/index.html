@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bimaks Ürün Asistanı</title>
+    <title>Bimaks Ürün Asistanı - Akıllı Kimya Çözümleri</title>
+    <link rel="icon" type="image/x-icon" href="https://www.bimakskimya.com.tr/wp-content/uploads/2023/03/cropped-favicon-32x32.png">
     <style>
         * {
             margin: 0;
@@ -11,41 +12,90 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-color: #0066cc;
+            --secondary-color: #004499;
+            --accent-color: #00aaff;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --light-bg: #f8f9fa;
+            --dark-bg: #343a40;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             min-height: 100vh;
-            padding: 20px;
+            color: var(--text-primary);
+            line-height: 1.6;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
+            padding: 20px;
         }
 
+        /* Header */
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 30px;
+            margin-bottom: 30px;
             text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            box-shadow: var(--shadow);
         }
 
         .header h1 {
+            color: var(--primary-color);
             font-size: 2.5rem;
+            font-weight: 600;
             margin-bottom: 10px;
         }
 
         .header p {
+            color: var(--text-secondary);
             font-size: 1.2rem;
-            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
+        /* Main Content */
         .main-content {
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
             padding: 40px;
+            border: 1px solid var(--border-color);
         }
 
         .input-section {
@@ -56,35 +106,46 @@
             display: flex;
             gap: 15px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         .input-group input {
             flex: 1;
-            padding: 15px 20px;
-            border: 2px solid #e1e5e9;
-            border-radius: 10px;
+            min-width: 300px;
+            padding: 18px 25px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
             font-size: 16px;
-            transition: border-color 0.3s;
+            transition: all 0.3s ease;
+            background: white;
         }
 
         .input-group input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
         }
 
         .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
+            padding: 18px 35px;
+            border-radius: 12px;
             font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
         }
 
         .btn:hover {
             transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn:active {
+            transform: translateY(0);
         }
 
         .btn:disabled {
@@ -93,20 +154,21 @@
             transform: none;
         }
 
+        /* Loading */
         .loading {
             text-align: center;
-            padding: 20px;
-            color: #666;
+            padding: 40px;
+            color: var(--text-secondary);
         }
 
         .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
+            margin: 0 auto 20px;
         }
 
         @keyframes spin {
@@ -114,83 +176,97 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* Results */
         .results {
             display: none;
         }
 
         .summary-card {
-            background: #f8f9fa;
+            background: var(--light-bg);
             border-radius: 15px;
-            padding: 25px;
+            padding: 30px;
             margin-bottom: 30px;
-            border-left: 5px solid #667eea;
+            border-left: 5px solid var(--primary-color);
+            box-shadow: var(--shadow);
         }
 
         .summary-card h3 {
-            color: #333;
+            color: var(--primary-color);
             margin-bottom: 15px;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .summary-card p {
-            color: #666;
-            line-height: 1.6;
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-size: 1.1rem;
         }
 
+        /* Products Grid */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
             margin-bottom: 30px;
         }
 
         .product-card {
             background: white;
-            border: 1px solid #e1e5e9;
+            border: 1px solid var(--border-color);
             border-radius: 15px;
-            padding: 25px;
-            transition: transform 0.2s, box-shadow 0.2s;
+            padding: 30px;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
         }
 
         .product-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-color);
         }
 
         .product-name {
-            color: #667eea;
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 10px;
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            line-height: 1.4;
         }
 
         .product-category {
-            background: #e3f2fd;
-            color: #1976d2;
-            padding: 5px 12px;
+            background: var(--primary-color);
+            color: white;
+            padding: 6px 15px;
             border-radius: 20px;
             font-size: 0.9rem;
+            font-weight: 500;
             display: inline-block;
             margin-bottom: 15px;
         }
 
         .product-desc {
-            color: #666;
-            margin-bottom: 15px;
-            line-height: 1.5;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 1rem;
         }
 
         .product-details {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
+            background: var(--light-bg);
+            border-radius: 12px;
+            padding: 20px;
             margin-bottom: 15px;
         }
 
         .product-details h4 {
-            color: #333;
-            margin-bottom: 8px;
-            font-size: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
         }
 
         .product-details ul {
@@ -199,36 +275,75 @@
         }
 
         .product-details li {
-            color: #666;
-            padding: 3px 0;
-            font-size: 0.9rem;
+            color: var(--text-secondary);
+            padding: 5px 0;
+            font-size: 0.95rem;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .product-details li:before {
+            content: "•";
+            color: var(--primary-color);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
         }
 
         .product-link {
             display: inline-block;
-            background: #667eea;
+            background: var(--primary-color);
             color: white;
             text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            transition: background 0.2s;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
         }
 
         .product-link:hover {
-            background: #5a6fd8;
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
 
+        /* Error */
         .error {
-            background: #ffebee;
-            color: #c62828;
-            padding: 15px;
-            border-radius: 10px;
+            background: #fff5f5;
+            color: var(--danger-color);
+            padding: 20px;
+            border-radius: 12px;
             margin-bottom: 20px;
-            border-left: 5px solid #c62828;
+            border-left: 5px solid var(--danger-color);
+            box-shadow: var(--shadow);
         }
 
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+            margin-top: 40px;
+        }
+
+        .footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
             .header h1 {
                 font-size: 2rem;
             }
@@ -237,34 +352,79 @@
                 flex-direction: column;
             }
             
+            .input-group input {
+                min-width: auto;
+            }
+            
             .products-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .main-content {
+                padding: 25px;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --light-bg: #2d3748;
+                --text-primary: #f7fafc;
+                --text-secondary: #a0aec0;
+                --border-color: #4a5568;
+            }
+            
+            body {
+                background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            }
+            
+            .header, .main-content, .product-card {
+                background: #2d3748;
+                border-color: #4a5568;
+            }
+            
+            .input-group input {
+                background: #4a5568;
+                color: #f7fafc;
+                border-color: #718096;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <div class="header">
-            <h1>🧪 Bimaks Ürün Asistanı</h1>
-            <p>Kimya ürünleriniz için akıllı öneriler</p>
+            <div class="logo-section">
+                <div class="logo">B</div>
+                <div>
+                    <h1>Bimaks Ürün Asistanı</h1>
+                    <p>Akıllı kimya çözümleri için uzman öneriler</p>
+                </div>
+            </div>
         </div>
 
+        <!-- Main Content -->
         <div class="main-content">
             <div class="input-section">
                 <div class="input-group">
                     <input type="text" id="promptInput" placeholder="Sorununuzu açıklayın... (örn: Ters osmoz sistemimde kireçlenme problemi yaşıyorum)" />
-                    <button class="btn" onclick="getRecommendations()">Öneri Al</button>
+                    <button class="btn" onclick="getRecommendations()">
+                        <span id="btnText">Öneri Al</span>
+                    </button>
                 </div>
             </div>
 
+            <!-- Loading -->
             <div id="loading" class="loading" style="display: none;">
                 <div class="spinner"></div>
-                <p>Ürün önerileri hazırlanıyor...</p>
+                <p>En uygun ürünler aranıyor...</p>
             </div>
 
+            <!-- Error -->
             <div id="error" class="error" style="display: none;"></div>
 
+            <!-- Results -->
             <div id="results" class="results">
                 <div id="summary" class="summary-card">
                     <h3>📋 Özet</h3>
@@ -284,12 +444,16 @@
                 </div>
             </div>
         </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 2025 Bimaks Kimya. Tüm hakları saklıdır. | 
+            <a href="https://www.bimakskimya.com.tr" target="_blank">Bimaks Kimya</a></p>
+        </div>
     </div>
 
     <script>
-        const API_BASE = window.location.hostname === 'localhost' 
-            ? 'http://localhost:8000' 
-            : 'https://your-render-app.onrender.com'; // Render URL'nizi buraya ekleyin
+        const API_BASE = 'https://bimaks-urun-asistani.onrender.com';
 
         async function getRecommendations() {
             const prompt = document.getElementById('promptInput').value.trim();
@@ -361,23 +525,23 @@
                 <div class="product-desc">${product.short_desc}</div>
                 
                 <div class="product-details">
-                    <h4>Uygulamalar:</h4>
+                    <h4>Uygulamalar</h4>
                     <ul>
-                        ${product.applications.map(app => `<li>• ${app}</li>`).join('')}
+                        ${product.applications.map(app => `<li>${app}</li>`).join('')}
                     </ul>
                 </div>
                 
                 <div class="product-details">
-                    <h4>Çözülen Problemler:</h4>
+                    <h4>Çözülen Problemler</h4>
                     <ul>
-                        ${product.problems_solved.map(problem => `<li>• ${problem}</li>`).join('')}
+                        ${product.problems_solved.map(problem => `<li>${problem}</li>`).join('')}
                     </ul>
                 </div>
                 
                 <div class="product-details">
-                    <h4>Önemli Parametreler:</h4>
+                    <h4>Önemli Parametreler</h4>
                     <ul>
-                        ${product.key_params.map(param => `<li>• ${param}</li>`).join('')}
+                        ${product.key_params.map(param => `<li>${param}</li>`).join('')}
                     </ul>
                 </div>
                 
@@ -389,6 +553,16 @@
 
         function showLoading(show) {
             document.getElementById('loading').style.display = show ? 'block' : 'none';
+            const btn = document.querySelector('.btn');
+            const btnText = document.getElementById('btnText');
+            
+            if (show) {
+                btn.disabled = true;
+                btnText.textContent = 'Aranıyor...';
+            } else {
+                btn.disabled = false;
+                btnText.textContent = 'Öneri Al';
+            }
         }
 
         function showError(message) {
@@ -406,6 +580,11 @@
             if (e.key === 'Enter') {
                 getRecommendations();
             }
+        });
+
+        // Sayfa yüklendiğinde input'a focus
+        window.addEventListener('load', function() {
+            document.getElementById('promptInput').focus();
         });
     </script>
 </body>
