@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bimaks Ürün Asistanı - Akıllı Kimya Çözümleri</title>
-    <link rel="icon" type="image/x-icon" href="https://www.bimakskimya.com.tr/wp-content/uploads/2023/03/cropped-favicon-32x32.png">
+    <title>Bimaks Ürün Asistanı</title>
     <style>
         * {
             margin: 0;
@@ -13,162 +12,183 @@
         }
 
         :root {
-            --primary-color: #0066cc;
-            --secondary-color: #004499;
-            --accent-color: #00aaff;
-            --success-color: #28a745;
-            --warning-color: #ffc107;
-            --danger-color: #dc3545;
-            --light-bg: #f8f9fa;
-            --dark-bg: #343a40;
-            --text-primary: #212529;
-            --text-secondary: #6c757d;
-            --border-color: #dee2e6;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+            --primary-blue: #6A8EEA;
+            --light-blue: #E8F0FE;
+            --dark-blue: #4A6EC0;
+            --text-dark: #2C3E50;
+            --text-light: #7F8C8D;
+            --white: #FFFFFF;
+            --border: #E1E8ED;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            background: linear-gradient(135deg, #F5F7FA 0%, #C3CFE2 100%);
             min-height: 100vh;
-            color: var(--text-primary);
-            line-height: 1.6;
+            padding: 20px;
+            color: var(--text-dark);
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Header */
-        .header {
-            background: white;
-            border-radius: 15px;
+            background: var(--white);
+            border-radius: 20px;
             box-shadow: var(--shadow);
-            padding: 30px;
-            margin-bottom: 30px;
-            text-align: center;
-            border: 1px solid var(--border-color);
+            overflow: hidden;
+            min-height: 80vh;
         }
 
-        .logo-section {
+        .header {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 25px 30px;
+            text-align: center;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
             gap: 15px;
         }
 
         .logo {
-            width: 60px;
-            height: 60px;
-            background: var(--primary-color);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 24px;
-            box-shadow: var(--shadow);
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: -1px;
         }
 
         .header h1 {
-            color: var(--primary-color);
-            font-size: 2.5rem;
-            font-weight: 600;
+            font-size: 1.8em;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .chat-container {
+            padding: 30px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.assistant {
+            justify-content: flex-start;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 15px 20px;
+            border-radius: 18px;
+            line-height: 1.6;
+        }
+
+        .message.user .message-content {
+            background: var(--primary-blue);
+            color: var(--white);
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.assistant .message-content {
+            background: var(--light-blue);
+            color: var(--text-dark);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-content h3 {
             margin-bottom: 10px;
+            color: var(--primary-blue);
+            font-size: 1.1em;
         }
 
-        .header p {
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            max-width: 600px;
-            margin: 0 auto;
+        .message-content ul {
+            margin: 10px 0;
+            padding-left: 20px;
         }
 
-        /* Main Content */
-        .main-content {
-            background: white;
-            border-radius: 15px;
-            box-shadow: var(--shadow);
-            padding: 40px;
-            border: 1px solid var(--border-color);
+        .message-content li {
+            margin-bottom: 8px;
+        }
+
+        .message-content a {
+            color: var(--dark-blue);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .message-content a:hover {
+            text-decoration: underline;
         }
 
         .input-section {
-            margin-bottom: 40px;
+            padding: 25px 30px;
+            background: var(--white);
+            border-top: 1px solid var(--border);
         }
 
         .input-group {
             display: flex;
             gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+            align-items: center;
         }
 
         .input-group input {
             flex: 1;
-            min-width: 300px;
-            padding: 18px 25px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
+            padding: 15px 20px;
+            border: 2px solid var(--border);
+            border-radius: 25px;
             font-size: 16px;
-            transition: all 0.3s ease;
-            background: white;
+            outline: none;
+            transition: border-color 0.3s ease;
         }
 
         .input-group input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+            border-color: var(--primary-blue);
         }
 
-        .btn {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
+        .input-group button {
+            padding: 15px 30px;
+            background: var(--primary-blue);
+            color: var(--white);
             border: none;
-            padding: 18px 35px;
-            border-radius: 12px;
+            border-radius: 25px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .btn:hover {
+        .input-group button:hover {
+            background: var(--dark-blue);
             transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
         }
 
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn:disabled {
+        .input-group button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
         }
 
-        /* Loading */
         .loading {
-            text-align: center;
-            padding: 40px;
-            color: var(--text-secondary);
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--primary-color);
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid var(--white);
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
         }
 
         @keyframes spin {
@@ -176,416 +196,206 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Results */
-        .results {
-            display: none;
-        }
-
-        .summary-card {
-            background: var(--light-bg);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 30px;
-            border-left: 5px solid var(--primary-color);
-            box-shadow: var(--shadow);
-        }
-
-        .summary-card h3 {
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            font-size: 1.4rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .summary-card p {
-            color: var(--text-primary);
-            line-height: 1.7;
-            font-size: 1.1rem;
-        }
-
-        /* Products Grid */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-
-        .product-card {
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            padding: 30px;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow);
-        }
-
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-lg);
-            border-color: var(--primary-color);
-        }
-
-        .product-name {
-            color: var(--primary-color);
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-            line-height: 1.4;
-        }
-
-        .product-category {
-            background: var(--primary-color);
-            color: white;
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            display: inline-block;
-            margin-bottom: 15px;
-        }
-
-        .product-desc {
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-            line-height: 1.6;
-            font-size: 1rem;
-        }
-
-        .product-details {
-            background: var(--light-bg);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-        }
-
-        .product-details h4 {
-            color: var(--text-primary);
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .product-details ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .product-details li {
-            color: var(--text-secondary);
-            padding: 5px 0;
-            font-size: 0.95rem;
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .product-details li:before {
-            content: "•";
-            color: var(--primary-color);
-            font-weight: bold;
-            position: absolute;
-            left: 0;
-        }
-
-        .product-link {
-            display: inline-block;
-            background: var(--primary-color);
-            color: white;
-            text-decoration: none;
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow);
-        }
-
-        .product-link:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        /* Error */
         .error {
-            background: #fff5f5;
-            color: var(--danger-color);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            border-left: 5px solid var(--danger-color);
-            box-shadow: var(--shadow);
+            background: #FFE6E6;
+            color: #D63031;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border: 1px solid #FFB8B8;
         }
 
-        /* Footer */
-        .footer {
+        .welcome-message {
             text-align: center;
-            padding: 30px;
-            color: var(--text-secondary);
-            margin-top: 40px;
+            color: var(--text-light);
+            font-style: italic;
+            margin-bottom: 20px;
         }
 
-        .footer a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
             .container {
-                padding: 15px;
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 20px;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .logo {
+                font-size: 2em;
             }
             
             .header h1 {
-                font-size: 2rem;
+                font-size: 1.4em;
+            }
+            
+            .chat-container {
+                padding: 20px;
+                max-height: 50vh;
+            }
+            
+            .input-section {
+                padding: 20px;
             }
             
             .input-group {
                 flex-direction: column;
             }
             
-            .input-group input {
-                min-width: auto;
-            }
-            
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .main-content {
-                padding: 25px;
-            }
-        }
-
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --light-bg: #2d3748;
-                --text-primary: #f7fafc;
-                --text-secondary: #a0aec0;
-                --border-color: #4a5568;
-            }
-            
-            body {
-                background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
-            }
-            
-            .header, .main-content, .product-card {
-                background: #2d3748;
-                border-color: #4a5568;
-            }
-            
-            .input-group input {
-                background: #4a5568;
-                color: #f7fafc;
-                border-color: #718096;
+            .input-group button {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
         <div class="header">
-            <div class="logo-section">
-                <div class="logo">B</div>
-                <div>
-                    <h1>Bimaks Ürün Asistanı</h1>
-                    <p>Akıllı kimya çözümleri için uzman öneriler</p>
-                </div>
+            <div class="logo">bimaks</div>
+            <h1>Ürün Asistanı</h1>
+        </div>
+        
+        <div class="chat-container" id="chat-container">
+            <div class="welcome-message">
+                Merhaba! Bimaks Ürün Asistanı'na hoş geldiniz. Kimya ile ilgili sorularınızı veya ihtiyaçlarınızı bana yazabilirsiniz.
             </div>
         </div>
-
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="input-section">
-                <div class="input-group">
-                    <input type="text" id="promptInput" placeholder="Sorununuzu açıklayın... (örn: Ters osmoz sistemimde kireçlenme problemi yaşıyorum)" />
-                    <button class="btn" onclick="getRecommendations()">
-                        <span id="btnText">Öneri Al</span>
-                    </button>
-                </div>
+        
+        <div class="input-section">
+            <div class="input-group">
+                <input type="text" id="user-input" placeholder="Sorunuzu buraya yazın...">
+                <button id="send-button">
+                    <span class="button-text">Gönder</span>
+                    <div class="loading"></div>
+                </button>
             </div>
-
-            <!-- Loading -->
-            <div id="loading" class="loading" style="display: none;">
-                <div class="spinner"></div>
-                <p>En uygun ürünler aranıyor...</p>
-            </div>
-
-            <!-- Error -->
-            <div id="error" class="error" style="display: none;"></div>
-
-            <!-- Results -->
-            <div id="results" class="results">
-                <div id="summary" class="summary-card">
-                    <h3>📋 Özet</h3>
-                    <p id="summaryText"></p>
-                </div>
-
-                <div id="products" class="products-grid"></div>
-
-                <div id="safety" class="summary-card">
-                    <h3>🛡️ Güvenlik</h3>
-                    <p id="safetyText"></p>
-                </div>
-
-                <div id="followUp" class="summary-card">
-                    <h3>🔄 Sonraki Adımlar</h3>
-                    <p id="followUpText"></p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="footer">
-            <p>© 2025 Bimaks Kimya. Tüm hakları saklıdır. | 
-            <a href="https://www.bimakskimya.com.tr" target="_blank">Bimaks Kimya</a></p>
         </div>
     </div>
 
     <script>
-        const API_BASE = 'https://bimaks-urun-asistani.onrender.com';
+        const chatContainer = document.getElementById('chat-container');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
 
-        async function getRecommendations() {
-            const prompt = document.getElementById('promptInput').value.trim();
-            
-            if (!prompt) {
-                showError('Lütfen bir sorun açıklayın.');
-                return;
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
             }
+        });
 
-            showLoading(true);
-            hideError();
+        async function sendMessage() {
+            const prompt = userInput.value.trim();
+            if (prompt === '') return;
+
+            // Kullanıcı mesajını ekle
+            addMessage(prompt, 'user');
+            userInput.value = '';
+            
+            // Butonu devre dışı bırak
+            sendButton.disabled = true;
+            sendButton.querySelector('.button-text').style.display = 'none';
+            sendButton.querySelector('.loading').style.display = 'block';
 
             try {
-                const response = await fetch(`${API_BASE}/api/recommend`, {
+                const response = await fetch('/api/recommend', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ prompt })
+                    body: JSON.stringify({ prompt: prompt }),
                 });
 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'API hatası oluştu.');
                 }
 
                 const data = await response.json();
-                displayResults(data);
+                addAssistantResponse(data);
+
             } catch (error) {
-                console.error('Error:', error);
-                showError('Ürün önerisi alınırken bir hata oluştu. Lütfen tekrar deneyin.');
+                console.error('Hata:', error);
+                addErrorMessage(`Üzgünüm, bir hata oluştu: ${error.message}`);
             } finally {
-                showLoading(false);
+                // Butonu tekrar aktif et
+                sendButton.disabled = false;
+                sendButton.querySelector('.button-text').style.display = 'inline';
+                sendButton.querySelector('.loading').style.display = 'none';
+                
+                // Chat'i en alta kaydır
+                chatContainer.scrollTop = chatContainer.scrollHeight;
             }
         }
 
-        function displayResults(data) {
-            // Özet
-            document.getElementById('summaryText').textContent = data.summary;
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', sender);
             
-            // Ürünler
-            const productsContainer = document.getElementById('products');
-            productsContainer.innerHTML = '';
+            const contentDiv = document.createElement('div');
+            contentDiv.classList.add('message-content');
+            contentDiv.textContent = text;
             
-            data.products.forEach(product => {
-                const productCard = createProductCard(product);
-                productsContainer.appendChild(productCard);
-            });
-
-            // Güvenlik
-            document.getElementById('safetyText').textContent = data.safety;
+            messageDiv.appendChild(contentDiv);
+            chatContainer.appendChild(messageDiv);
             
-            // Sonraki adımlar
-            document.getElementById('followUpText').textContent = data.follow_up;
-
-            // Sonuçları göster
-            document.getElementById('results').style.display = 'block';
-            
-            // Sayfayı sonuçlara kaydır
-            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            // Chat'i en alta kaydır
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        function createProductCard(product) {
-            const card = document.createElement('div');
-            card.className = 'product-card';
+        function addAssistantResponse(data) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', 'assistant');
             
-            card.innerHTML = `
-                <div class="product-name">${product.product_name}</div>
-                <div class="product-category">${product.category}</div>
-                <div class="product-desc">${product.short_desc}</div>
-                
-                <div class="product-details">
-                    <h4>Uygulamalar</h4>
-                    <ul>
-                        ${product.applications.map(app => `<li>${app}</li>`).join('')}
-                    </ul>
-                </div>
-                
-                <div class="product-details">
-                    <h4>Çözülen Problemler</h4>
-                    <ul>
-                        ${product.problems_solved.map(problem => `<li>${problem}</li>`).join('')}
-                    </ul>
-                </div>
-                
-                <div class="product-details">
-                    <h4>Önemli Parametreler</h4>
-                    <ul>
-                        ${product.key_params.map(param => `<li>${param}</li>`).join('')}
-                    </ul>
-                </div>
-                
-                <a href="${product.url}" target="_blank" class="product-link">Detayları Gör</a>
-            `;
+            const contentDiv = document.createElement('div');
+            contentDiv.classList.add('message-content');
             
-            return card;
-        }
-
-        function showLoading(show) {
-            document.getElementById('loading').style.display = show ? 'block' : 'none';
-            const btn = document.querySelector('.btn');
-            const btnText = document.getElementById('btnText');
+            let html = '';
             
-            if (show) {
-                btn.disabled = true;
-                btnText.textContent = 'Aranıyor...';
-            } else {
-                btn.disabled = false;
-                btnText.textContent = 'Öneri Al';
+            if (data.summary) {
+                html += `<h3>📋 Özet</h3><p>${data.summary}</p>`;
             }
+            
+            if (data.products && data.products.length > 0) {
+                html += '<h3>🔬 Önerilen Ürünler</h3><ul>';
+                data.products.forEach(product => {
+                    html += `<li><a href="${product.url}" target="_blank">${product.product_name}</a> - ${product.short_desc}</li>`;
+                });
+                html += '</ul>';
+            }
+            
+            if (data.safety) {
+                html += `<h3>⚠️ Güvenlik</h3><p>${data.safety}</p>`;
+            }
+            
+            if (data.follow_up) {
+                html += `<h3>📞 Sonraki Adımlar</h3><p>${data.follow_up}</p>`;
+            }
+            
+            contentDiv.innerHTML = html;
+            messageDiv.appendChild(contentDiv);
+            chatContainer.appendChild(messageDiv);
+            
+            // Chat'i en alta kaydır
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        function showError(message) {
-            const errorDiv = document.getElementById('error');
+        function addErrorMessage(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.classList.add('error');
             errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
+            chatContainer.appendChild(errorDiv);
+            
+            // Chat'i en alta kaydır
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
-
-        function hideError() {
-            document.getElementById('error').style.display = 'none';
-        }
-
-        // Enter tuşu ile öneri al
-        document.getElementById('promptInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                getRecommendations();
-            }
-        });
-
-        // Sayfa yüklendiğinde input'a focus
-        window.addEventListener('load', function() {
-            document.getElementById('promptInput').focus();
-        });
     </script>
 </body>
 </html>
