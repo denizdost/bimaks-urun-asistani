@@ -29,21 +29,43 @@ class ProductSearch:
             print(f"❌ Veri yükleme hatası: {e}")
             return []
     
+    def _is_valid_product(self, p: Dict[str, Any]) -> bool:
+        """Kategori/menü sayfalarını ve hatalı URL'leri ele"""
+        url = (p.get('url') or '').lower()
+        name = (p.get('product_name') or '').lower()
+        if not url.startswith('http'):  # statik/pdf vs.
+            return False
+        if 'info@' in url:
+            return False
+        # genel menü/kategori kelimeleri
+        banned = ('urun-gruplar', 'urun gruplar', 'hammaddeler', 'haberler', 'etkinlik', 'teknik-', 'iletisim', 'bulten', 'nasil-dogru')
+        if any(b in url for b in banned):
+            return False
+        # isim çok genel ise (örn: "ürün grupları")
+        if 'grubu' in name or 'ürünleri' == name or name.strip() in ('ürün grupları', 'ters osmoz ürünleri'):
+            return False
+        # derinlik kontrolü: /a/b/c/d en az 4 segment
+        depth = [seg for seg in url.split('/') if seg and 'http' not in seg]
+        return len(depth) >= 4
+    
     def _build_search_index(self):
         """TF-IDF vektörleri oluştur"""
         if not self.products:
             return
         
+        # Sadece geçerli ürünleri indeksle
+        self.products = [p for p in self.products if self._is_valid_product(p)]
+        
         # Her ürün için arama metni oluştur
         search_texts = []
         for product in self.products:
             text_parts = [
-                product['product_name'],
-                product['category'],
-                ' '.join(product['applications']),
-                ' '.join(product['problems_solved']),
-                ' '.join(product['key_params']),
-                product['short_desc']
+                product.get('product_name', ''),
+                product.get('category', ''),
+                ' '.join(product.get('applications', [])),
+                ' '.join(product.get('problems_solved', [])),
+                ' '.join(product.get('key_params', [])),
+                product.get('short_desc', '')
             ]
             search_texts.append(' '.join(text_parts).lower())
         
@@ -68,15 +90,18 @@ class ProductSearch:
         similarities = cosine_similarity(query_vector, self.product_vectors).flatten()
         
         # En yüksek skorlu ürünleri al
-        top_indices = np.argsort(similarities)[::-1][:top_k]
+        top_indices = np.argsort(similarities)[::-1][:max(top_k*2, top_k)]  # biraz daha fazla al, sonra filtrele
         
-        # Sonuçları döndür
+        # Sonuçları döndür (geçerli URL şartı)
         results = []
         for idx in top_indices:
-            if similarities[idx] > 0:  # Sadece pozitif benzerlik skorları
+            if similarities[idx] > 0:
                 product = self.products[idx].copy()
-                product['similarity_score'] = float(similarities[idx])
-                results.append(product)
+                if self._is_valid_product(product):
+                    product['similarity_score'] = float(similarities[idx])
+                    results.append(product)
+            if len(results) >= top_k:
+                break
         
         return results
     
@@ -86,4 +111,4 @@ class ProductSearch:
     
     def get_products_by_category(self, category: str) -> List[Dict[str, Any]]:
         """Kategoriye göre ürünleri filtrele"""
-        return [p for p in self.products if p['category'].lower() == category.lower()]
+        return [p for p in self.products if p.get('category', '').lower() == category.lower()]
