@@ -131,35 +131,13 @@ class ProductSearch:
         return list(dict.fromkeys(tokens))
     
     def _reason(self, product: Dict[str, Any], query: str, score: float) -> str:
-        q = set(self._keywords(query))
-        fields = ' '.join([
-            product.get('product_name', ''),
-            product.get('category', ''),
-            ' '.join(product.get('applications', [])),
-            ' '.join(product.get('problems_solved', [])),
-            ' '.join(product.get('key_params', [])),
-            product.get('short_desc', '')
-        ]).lower()
-        f = set(self._keywords(fields))
-        overlap = [w for w in q if w in f][:3]
-        
-        # Daha açıklayıcı reason metni
         reasons = []
-        if overlap:
-            if len(overlap) == 1:
-                reasons.append(f"'{overlap[0]}' terimi ile eşleşiyor")
-            else:
-                reasons.append(f"'{', '.join(overlap)}' terimleri ile eşleşiyor")
         
         if product.get('category'):
             reasons.append(f"{product.get('category')} kategorisinde")
         
-        if score > 0.3:
-            reasons.append("yüksek uyum")
-        elif score > 0.1:
-            reasons.append("orta uyum")
-        else:
-            reasons.append("düşük uyum")
+        # Yüzdelik eşleşme oranı
+        reasons.append(f"benzerlik: {int(score*100)}%")
         
         return "; ".join(reasons)
     
