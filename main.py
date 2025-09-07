@@ -38,6 +38,7 @@ class Product(BaseModel):
     key_params: List[str]
     short_desc: str
     url: str
+    reason: Optional[str] = None
 
 class RecommendationResponse(BaseModel):
     summary: str

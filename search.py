@@ -33,6 +33,12 @@ class ProductSearch:
         try:
             slug = (url or '').rstrip('/').rsplit('/', 1)[-1]
             name = slug.replace('-', ' ').strip()
+            # Özel durumlar için düzeltmeler
+            if 'maks' in name.lower():
+                # MAKS 804 ANTİSKALANT gibi formatlar için
+                parts = name.split()
+                if len(parts) >= 2 and parts[0].upper() == 'MAKS':
+                    return f"MAKS {parts[1]} {' '.join(parts[2:]).upper()}"
             return name.upper()
         except Exception:
             return ''
@@ -44,7 +50,7 @@ class ProductSearch:
         generic_keys = (
             'hakkımızda', 'sertifikalar', 'insan kaynakları', 'gizlilik', 'politikası',
             'ürün grupları', 'ürün grubu', 'soğutma suyu ıslahı', 'su ve proses',
-            'haberler', 'etkinlik', 'teknik', 'e-bülten'
+            'haberler', 'etkinlik', 'teknik', 'e-bülten', 'endüstriyel su hazırlama sistemleri'
         )
         if any(k in n for k in generic_keys):
             return True
@@ -66,7 +72,7 @@ class ProductSearch:
             return False
         if 'info@' in url:
             return False
-        banned = ('urun-gruplar', 'urun-gruplari', 'hammaddeler', 'haberler', 'etkinlik', 'teknik-', 'iletisim', 'bulten', 'nasil-dogru')
+        banned = ('urun-gruplar', 'urun-gruplari', 'hammaddeler', 'haberler', 'etkinlik', 'teknik-', 'iletisim', 'bulten')
         if any(b in url for b in banned):
             return False
         depth = [seg for seg in url.split('/') if seg and 'http' not in seg]
