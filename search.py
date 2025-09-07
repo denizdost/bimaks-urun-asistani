@@ -147,16 +147,32 @@ class ProductSearch:
                 break
         # Eğer çok sıkı filtreden dolayı sonuç çıkmadıysa, en yakın skorları yumuşak filtreyle döndür
         if not results:
+            # Yumuşak fallback: yine de ürün sayfalarını şart koş
             soft = []
             for idx in np.argsort(similarities)[::-1]:
                 if similarities[idx] <= 0:
                     break
                 p = self.products[idx].copy()
-                p['similarity_score'] = float(similarities[idx])
-                soft.append(p)
+                if self._is_valid_product(p):
+                    p['similarity_score'] = float(similarities[idx])
+                    # isim generic ise URL'den türet
+                    if self._is_generic_name(p.get('product_name','')):
+                        derived = self._name_from_url(p.get('url',''))
+                        if derived:
+                            p['product_name'] = derived
+                    soft.append(p)
                 if len(soft) >= top_k:
                     break
-            return soft
+            if soft:
+                return soft
+            # Son çare: ilk uygun olmayanlardan türetilmiş adlarla dön
+            last_res = []
+            for idx in np.argsort(similarities)[::-1][:top_k]:
+                p = self.products[idx].copy()
+                p['similarity_score'] = float(similarities[idx])
+                p['product_name'] = self._name_from_url(p.get('url','')) or p.get('product_name','')
+                last_res.append(p)
+            return last_res
         return results
     
     def get_all_products(self) -> List[Dict[str, Any]]:
