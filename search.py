@@ -136,14 +136,23 @@ class ProductSearch:
         if not results:
             soft = []
             for idx in np.argsort(similarities)[::-1]:
-                if similarities[idx] <= 0:
-                    break
+                # en yakınları topla (0 olsa da)
                 p = self.products[idx].copy()
                 p['similarity_score'] = float(similarities[idx])
                 soft.append(p)
                 if len(soft) >= top_k:
                     break
-            return soft
+            if soft:
+                return soft
+        # son çare: ilk top_k ürünü döndür (her koşulda asla boş dönme)
+        if not results:
+            fallback = []
+            order = np.argsort(similarities)[::-1][:top_k]
+            for idx in order:
+                p = self.products[idx].copy()
+                p['similarity_score'] = float(similarities[idx])
+                fallback.append(p)
+            return fallback
         return results
     
     def get_all_products(self) -> List[Dict[str, Any]]:
