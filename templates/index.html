@@ -148,6 +148,16 @@
 
         .product-desc { color: var(--text-dark); font-size: 0.95em; margin-bottom: 10px; }
 
+        .product-reason {
+            background: #F8F9FA;
+            color: var(--text-light);
+            font-size: 0.85em;
+            padding: 8px 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--primary-blue);
+        }
+
         .product-actions { display: flex; gap: 8px; }
 
         .product-link {
@@ -324,6 +334,7 @@
                             <div class="product-name">${p.product_name}</div>
                             <div class="product-chip">${p.category || 'Ürün'}</div>
                             <div class="product-desc">${p.short_desc || ''}</div>
+                            ${p.reason ? `<div class="product-reason">💡 ${p.reason}</div>` : ''}
                             <div class="product-actions">
                                 <a class="product-link" href="${p.url}" target="_blank">Detay</a>
                                 ${p.doc_url ? `<a class="product-link" style="background:#5e728f" href="${p.doc_url}" target="_blank">PDF</a>` : ''}
