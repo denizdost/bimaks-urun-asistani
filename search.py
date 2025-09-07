@@ -72,17 +72,12 @@ class ProductSearch:
             return False
         if 'info@' in url:
             return False
-        banned = ('urun-gruplar', 'urun-gruplari', 'hammaddeler', 'haberler', 'etkinlik', 'teknik-', 'iletisim', 'bulten')
+        # Sadece gerçekten kötü URL'leri filtrele
+        banned = ('urun-gruplar', 'urun-gruplari', 'hammaddeler', 'haberler', 'etkinlik', 'iletisim', 'bulten')
         if any(b in url for b in banned):
             return False
-        depth = [seg for seg in url.split('/') if seg and 'http' not in seg]
-        if len(depth) >= 4:
-            return True
-        if len(depth) >= 3:
-            leaf = depth[-1]
-            if any(k in leaf for k in ('maks', 'antiskal', 'temizleyici', 'korozyon', 'biyosit', 'urunu', 'kimyasal')):
-                return True
-        return False
+        # Daha esnek filtreleme - çoğu URL'yi kabul et
+        return True
     
     def _normalize_products(self):
         normalized: List[Dict[str, Any]] = []
@@ -97,7 +92,7 @@ class ProductSearch:
             # short_desc temizle ve kısalt
             short_desc = (p.get('short_desc') or '').strip()
             # Gereksiz metinleri temizle
-            if 'hakkımızda' in short_desc.lower() or 'sertifikalar' in short_desc.lower() or 'gizlilik' in short_desc.lower():
+            if any(word in short_desc.lower() for word in ['hakkımızda', 'sertifikalar', 'gizlilik', 'politikası', 'insan kaynakları', 'arges']):
                 short_desc = ''
             if not short_desc or len(short_desc) < 5:
                 p['short_desc'] = p['product_name']
@@ -146,14 +141,27 @@ class ProductSearch:
             product.get('short_desc', '')
         ]).lower()
         f = set(self._keywords(fields))
-        overlap = [w for w in q if w in f][:5]
-        parts = []
+        overlap = [w for w in q if w in f][:3]
+        
+        # Daha açıklayıcı reason metni
+        reasons = []
         if overlap:
-            parts.append("eşleşen terimler: " + ', '.join(overlap))
+            if len(overlap) == 1:
+                reasons.append(f"'{overlap[0]}' terimi ile eşleşiyor")
+            else:
+                reasons.append(f"'{', '.join(overlap)}' terimleri ile eşleşiyor")
+        
         if product.get('category'):
-            parts.append(f"kategori: {product.get('category')}")
-        parts.append(f"benzerlik: {int(score*100)}%")
-        return "; ".join(parts)
+            reasons.append(f"{product.get('category')} kategorisinde")
+        
+        if score > 0.3:
+            reasons.append("yüksek uyum")
+        elif score > 0.1:
+            reasons.append("orta uyum")
+        else:
+            reasons.append("düşük uyum")
+        
+        return "; ".join(reasons)
     
     def search(self, query: str, top_k: int = 3) -> List[Dict[str, Any]]:
         if not self.products or self.vectorizer is None:
