@@ -49,6 +49,7 @@
             align-items: center;
             justify-content: center;
             gap: 15px;
+            flex-wrap: wrap;
         }
 
         .logo {
@@ -64,9 +65,16 @@
             margin: 0;
         }
 
+        .slogan {
+            width: 100%;
+            font-size: 0.95em;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+
         .chat-container {
-            padding: 30px;
-            max-height: 60vh;
+            padding: 24px 30px 10px 30px;
+            max-height: 56vh;
             overflow-y: auto;
         }
 
@@ -76,16 +84,11 @@
             align-items: flex-start;
         }
 
-        .message.user {
-            justify-content: flex-end;
-        }
-
-        .message.assistant {
-            justify-content: flex-start;
-        }
+        .message.user { justify-content: flex-end; }
+        .message.assistant { justify-content: flex-start; }
 
         .message-content {
-            max-width: 70%;
+            max-width: 92%;
             padding: 15px 20px;
             border-radius: 18px;
             line-height: 1.6;
@@ -104,42 +107,65 @@
             border-bottom-left-radius: 5px;
         }
 
-        .message-content h3 {
-            margin-bottom: 10px;
+        .section-title {
+            margin: 10px 0 8px 0;
             color: var(--primary-blue);
-            font-size: 1.1em;
+            font-size: 1.05em;
+            font-weight: 600;
         }
 
-        .message-content ul {
-            margin: 10px 0;
-            padding-left: 20px;
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+            margin-top: 10px;
         }
 
-        .message-content li {
+        .product-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
+            box-shadow: var(--shadow);
+        }
+
+        .product-name {
+            color: var(--dark-blue);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .product-chip {
+            display: inline-block;
+            background: var(--light-blue);
+            color: var(--dark-blue);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            padding: 2px 10px;
+            font-size: 12px;
             margin-bottom: 8px;
         }
 
-        .message-content a {
-            color: var(--dark-blue);
-            text-decoration: none;
-            font-weight: 500;
-        }
+        .product-desc { color: var(--text-dark); font-size: 0.95em; margin-bottom: 10px; }
 
-        .message-content a:hover {
-            text-decoration: underline;
+        .product-actions { display: flex; gap: 8px; }
+
+        .product-link {
+            text-decoration: none;
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.9em;
         }
 
         .input-section {
-            padding: 25px 30px;
+            padding: 18px 30px 26px 30px;
             background: var(--white);
             border-top: 1px solid var(--border);
         }
 
-        .input-group {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
+        .input-group { display: flex; gap: 15px; align-items: center; }
 
         .input-group input {
             flex: 1;
@@ -150,10 +176,7 @@
             outline: none;
             transition: border-color 0.3s ease;
         }
-
-        .input-group input:focus {
-            border-color: var(--primary-blue);
-        }
+        .input-group input:focus { border-color: var(--primary-blue); }
 
         .input-group button {
             padding: 15px 30px;
@@ -169,32 +192,18 @@
             align-items: center;
             gap: 8px;
         }
-
-        .input-group button:hover {
-            background: var(--dark-blue);
-            transform: translateY(-2px);
-        }
-
-        .input-group button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
+        .input-group button:hover { background: var(--dark-blue); transform: translateY(-2px); }
+        .input-group button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
         .loading {
             display: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
+            width: 20px; height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
             border-top: 2px solid var(--white);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
 
         .error {
             background: #FFE6E6;
@@ -205,53 +214,18 @@
             border: 1px solid #FFB8B8;
         }
 
-        .welcome-message {
-            text-align: center;
-            color: var(--text-light);
-            font-style: italic;
-            margin-bottom: 20px;
-        }
+        .welcome-message { text-align: center; color: var(--text-light); font-style: italic; margin-bottom: 20px; }
 
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            
-            .container {
-                border-radius: 15px;
-            }
-            
-            .header {
-                padding: 20px;
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .logo {
-                font-size: 2em;
-            }
-            
-            .header h1 {
-                font-size: 1.4em;
-            }
-            
-            .chat-container {
-                padding: 20px;
-                max-height: 50vh;
-            }
-            
-            .input-section {
-                padding: 20px;
-            }
-            
-            .input-group {
-                flex-direction: column;
-            }
-            
-            .input-group button {
-                width: 100%;
-                justify-content: center;
-            }
+            body { padding: 10px; }
+            .container { border-radius: 15px; }
+            .header { padding: 20px; gap: 8px; }
+            .logo { font-size: 2em; }
+            .header h1 { font-size: 1.35em; }
+            .chat-container { padding: 18px; max-height: 50vh; }
+            .input-section { padding: 18px; }
+            .input-group { flex-direction: column; }
+            .input-group button { width: 100%; justify-content: center; }
         }
     </style>
 </head>
@@ -260,17 +234,18 @@
         <div class="header">
             <div class="logo">bimaks</div>
             <h1>Ürün Asistanı</h1>
+            <div class="slogan">Continuously winning solutions</div>
         </div>
         
         <div class="chat-container" id="chat-container">
             <div class="welcome-message">
-                Merhaba! Bimaks Ürün Asistanı'na hoş geldiniz. Kimya ile ilgili sorularınızı veya ihtiyaçlarınızı bana yazabilirsiniz.
+                Merhaba! Bimaks Ürün Asistanı'na hoş geldiniz. Kimya ile ilgili sorularınızı veya ihtiyaçlarınızı yazın; uygun ürünleri ve açıklamaları getireyim.
             </div>
         </div>
         
         <div class="input-section">
             <div class="input-group">
-                <input type="text" id="user-input" placeholder="Sorunuzu buraya yazın...">
+                <input type="text" id="user-input" placeholder="Sorunuzu buraya yazın... (örn: ters osmoz kireçlenme)">
                 <button id="send-button">
                     <span class="button-text">Gönder</span>
                     <div class="loading"></div>
@@ -285,52 +260,35 @@
         const sendButton = document.getElementById('send-button');
 
         sendButton.addEventListener('click', sendMessage);
-        userInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
-        });
+        userInput.addEventListener('keypress', function(e) { if (e.key === 'Enter') sendMessage(); });
 
         async function sendMessage() {
             const prompt = userInput.value.trim();
             if (prompt === '') return;
 
-            // Kullanıcı mesajını ekle
             addMessage(prompt, 'user');
             userInput.value = '';
-            
-            // Butonu devre dışı bırak
             sendButton.disabled = true;
             sendButton.querySelector('.button-text').style.display = 'none';
             sendButton.querySelector('.loading').style.display = 'block';
 
             try {
                 const response = await fetch('/api/recommend', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ prompt: prompt }),
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt })
                 });
-
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.detail || 'API hatası oluştu.');
+                    const err = await response.json();
+                    throw new Error(err.detail || 'API hatası');
                 }
-
                 const data = await response.json();
                 addAssistantResponse(data);
-
             } catch (error) {
-                console.error('Hata:', error);
                 addErrorMessage(`Üzgünüm, bir hata oluştu: ${error.message}`);
             } finally {
-                // Butonu tekrar aktif et
                 sendButton.disabled = false;
                 sendButton.querySelector('.button-text').style.display = 'inline';
                 sendButton.querySelector('.loading').style.display = 'none';
-                
-                // Chat'i en alta kaydır
                 chatContainer.scrollTop = chatContainer.scrollHeight;
             }
         }
@@ -338,52 +296,53 @@
         function addMessage(text, sender) {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('message', sender);
-            
             const contentDiv = document.createElement('div');
             contentDiv.classList.add('message-content');
             contentDiv.textContent = text;
-            
             messageDiv.appendChild(contentDiv);
             chatContainer.appendChild(messageDiv);
-            
-            // Chat'i en alta kaydır
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
         function addAssistantResponse(data) {
             const messageDiv = document.createElement('div');
             messageDiv.classList.add('message', 'assistant');
-            
             const contentDiv = document.createElement('div');
             contentDiv.classList.add('message-content');
-            
+
             let html = '';
-            
             if (data.summary) {
-                html += `<h3>📋 Özet</h3><p>${data.summary}</p>`;
+                html += `<div class="section-title">📋 Özet</div><p>${data.summary}</p>`;
             }
-            
+
             if (data.products && data.products.length > 0) {
-                html += '<h3>🔬 Önerilen Ürünler</h3><ul>';
-                data.products.forEach(product => {
-                    html += `<li><a href="${product.url}" target="_blank">${product.product_name}</a> - ${product.short_desc}</li>`;
+                html += `<div class="section-title">🔬 Önerilen Ürünler</div>`;
+                html += `<div class="products-grid">`;
+                data.products.forEach(p => {
+                    html += `
+                        <div class="product-card">
+                            <div class="product-name">${p.product_name}</div>
+                            <div class="product-chip">${p.category || 'Ürün'}</div>
+                            <div class="product-desc">${p.short_desc || ''}</div>
+                            <div class="product-actions">
+                                <a class="product-link" href="${p.url}" target="_blank">Detay</a>
+                            </div>
+                        </div>
+                    `;
                 });
-                html += '</ul>';
+                html += `</div>`;
             }
-            
+
             if (data.safety) {
-                html += `<h3>⚠️ Güvenlik</h3><p>${data.safety}</p>`;
+                html += `<div class="section-title">⚠️ Güvenlik</div><p>${data.safety}</p>`;
             }
-            
             if (data.follow_up) {
-                html += `<h3>📞 Sonraki Adımlar</h3><p>${data.follow_up}</p>`;
+                html += `<div class="section-title">📞 Sonraki Adımlar</div><p>${data.follow_up}</p>`;
             }
-            
+
             contentDiv.innerHTML = html;
             messageDiv.appendChild(contentDiv);
             chatContainer.appendChild(messageDiv);
-            
-            // Chat'i en alta kaydır
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
@@ -392,8 +351,6 @@
             errorDiv.classList.add('error');
             errorDiv.textContent = message;
             chatContainer.appendChild(errorDiv);
-            
-            // Chat'i en alta kaydır
             chatContainer.scrollTop = chatContainer.scrollHeight;
         }
     </script>
