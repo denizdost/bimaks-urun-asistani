@@ -94,10 +94,15 @@ class ProductSearch:
                 fallback = self._name_from_url(p.get('url', ''))
                 if fallback:
                     p['product_name'] = fallback
-            # short_desc boş ise kısalt
+            # short_desc temizle ve kısalt
             short_desc = (p.get('short_desc') or '').strip()
+            # Gereksiz metinleri temizle
+            if 'hakkımızda' in short_desc.lower() or 'sertifikalar' in short_desc.lower() or 'gizlilik' in short_desc.lower():
+                short_desc = ''
             if not short_desc or len(short_desc) < 5:
                 p['short_desc'] = p['product_name']
+            else:
+                p['short_desc'] = short_desc
             normalized.append(p)
         self.products = normalized
     
