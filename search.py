@@ -132,6 +132,18 @@ class ProductSearch:
                     results.append(product)
             if len(results) >= top_k:
                 break
+        # Eğer çok sıkı filtreden dolayı sonuç çıkmadıysa, en yakın skorları yumuşak filtreyle döndür
+        if not results:
+            soft = []
+            for idx in np.argsort(similarities)[::-1]:
+                if similarities[idx] <= 0:
+                    break
+                p = self.products[idx].copy()
+                p['similarity_score'] = float(similarities[idx])
+                soft.append(p)
+                if len(soft) >= top_k:
+                    break
+            return soft
         return results
     
     def get_all_products(self) -> List[Dict[str, Any]]:
