@@ -47,7 +47,20 @@ class ProductSearch:
             'ürün grupları', 'ürün grubu', 'soğutma suyu ıslahı', 'su ve proses',
             'haberler', 'etkinlik', 'teknik', 'e-bülten'
         )
-        return any(k in n for k in generic_keys)
+        if any(k in n for k in generic_keys):
+            return True
+        # Kategori başlıkları: "... ürünleri" gibi — içinde marka/kod yoksa generic say
+        if 'ürünleri' in n and 'maks' not in n:
+            return True
+        # Sık görülen kategori adları
+        category_like = (
+            'ters osmoz', 'kazan', 'soğutma suyu', 'temizlik ürünleri', 'mikroorganizma kontrol',
+        )
+        if any(k in n for k in category_like):
+            # eğer bir ürün kodu/kriteri içermiyorsa generic
+            if not any(x in n for x in ('maks', 'antiskal', 'temizleyici', 'inhibitör', 'inhibitor', 'biyosit')):
+                return True
+        return False
     
     def _is_valid_product(self, p: Dict[str, Any]) -> bool:
         """Kategori/menü sayfalarını ve hatalı URL'leri ele"""
@@ -136,23 +149,14 @@ class ProductSearch:
         if not results:
             soft = []
             for idx in np.argsort(similarities)[::-1]:
-                # en yakınları topla (0 olsa da)
+                if similarities[idx] <= 0:
+                    break
                 p = self.products[idx].copy()
                 p['similarity_score'] = float(similarities[idx])
                 soft.append(p)
                 if len(soft) >= top_k:
                     break
-            if soft:
-                return soft
-        # son çare: ilk top_k ürünü döndür (her koşulda asla boş dönme)
-        if not results:
-            fallback = []
-            order = np.argsort(similarities)[::-1][:top_k]
-            for idx in order:
-                p = self.products[idx].copy()
-                p['similarity_score'] = float(similarities[idx])
-                fallback.append(p)
-            return fallback
+            return soft
         return results
     
     def get_all_products(self) -> List[Dict[str, Any]]:
