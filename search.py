@@ -33,7 +33,6 @@ class ProductSearch:
         try:
             slug = (url or '').rstrip('/').rsplit('/', 1)[-1]
             name = slug.replace('-', ' ').strip()
-            # Kısa MAKS kodlarını büyük yaz
             return name.upper()
         except Exception:
             return ''
@@ -49,15 +48,12 @@ class ProductSearch:
         )
         if any(k in n for k in generic_keys):
             return True
-        # Kategori başlıkları: "... ürünleri" gibi — içinde marka/kod yoksa generic say
         if 'ürünleri' in n and 'maks' not in n:
             return True
-        # Sık görülen kategori adları
         category_like = (
             'ters osmoz', 'kazan', 'soğutma suyu', 'temizlik ürünleri', 'mikroorganizma kontrol',
         )
         if any(k in n for k in category_like):
-            # eğer bir ürün kodu/kriteri içermiyorsa generic
             if not any(x in n for x in ('maks', 'antiskal', 'temizleyici', 'inhibitör', 'inhibitor', 'biyosit')):
                 return True
         return False
@@ -74,7 +70,6 @@ class ProductSearch:
         if any(b in url for b in banned):
             return False
         depth = [seg for seg in url.split('/') if seg and 'http' not in seg]
-        # Bazı gerçek ürün linkleri 3 segment olabiliyor; son slug içinde 'maks' veya rakam/kimyasal ipucu varsa kabul et
         if len(depth) >= 4:
             return True
         if len(depth) >= 3:
@@ -86,7 +81,6 @@ class ProductSearch:
     def _normalize_products(self):
         normalized: List[Dict[str, Any]] = []
         for p in self.products:
-            # URL/isim filtresi
             if not self._is_valid_product(p):
                 continue
             name = p.get('product_name') or ''
@@ -110,11 +104,7 @@ class ProductSearch:
         """TF-IDF vektörleri oluştur"""
         if not self.products:
             return
-        
-        # Normalize & filtrele
         self._normalize_products()
-        
-        # Her ürün için arama metni oluştur
         search_texts = []
         for product in self.products:
             text_parts = [
@@ -126,7 +116,6 @@ class ProductSearch:
                 product.get('short_desc', '')
             ]
             search_texts.append(' '.join(text_parts).lower())
-        
         self.vectorizer = TfidfVectorizer(
             max_features=1000,
             stop_words=None,
@@ -134,6 +123,31 @@ class ProductSearch:
         )
         self.product_vectors = self.vectorizer.fit_transform(search_texts)
         print("✅ Arama indeksi oluşturuldu")
+    
+    def _keywords(self, text: str) -> List[str]:
+        text = (text or '').lower()
+        tokens = [t for t in text.replace('-', ' ').replace('/', ' ').split() if len(t) > 2]
+        return list(dict.fromkeys(tokens))
+    
+    def _reason(self, product: Dict[str, Any], query: str, score: float) -> str:
+        q = set(self._keywords(query))
+        fields = ' '.join([
+            product.get('product_name', ''),
+            product.get('category', ''),
+            ' '.join(product.get('applications', [])),
+            ' '.join(product.get('problems_solved', [])),
+            ' '.join(product.get('key_params', [])),
+            product.get('short_desc', '')
+        ]).lower()
+        f = set(self._keywords(fields))
+        overlap = [w for w in q if w in f][:5]
+        parts = []
+        if overlap:
+            parts.append("eşleşen terimler: " + ', '.join(overlap))
+        if product.get('category'):
+            parts.append(f"kategori: {product.get('category')}")
+        parts.append(f"benzerlik: {int(score*100)}%")
+        return "; ".join(parts)
     
     def search(self, query: str, top_k: int = 3) -> List[Dict[str, Any]]:
         if not self.products or self.vectorizer is None:
@@ -147,12 +161,11 @@ class ProductSearch:
                 product = self.products[idx].copy()
                 if self._is_valid_product(product):
                     product['similarity_score'] = float(similarities[idx])
+                    product['reason'] = self._reason(product, query, product['similarity_score'])
                     results.append(product)
             if len(results) >= top_k:
                 break
-        # Eğer çok sıkı filtreden dolayı sonuç çıkmadıysa, en yakın skorları yumuşak filtreyle döndür
         if not results:
-            # Yumuşak fallback: yine de ürün sayfalarını şart koş
             soft = []
             for idx in np.argsort(similarities)[::-1]:
                 if similarities[idx] <= 0:
@@ -160,22 +173,22 @@ class ProductSearch:
                 p = self.products[idx].copy()
                 if self._is_valid_product(p):
                     p['similarity_score'] = float(similarities[idx])
-                    # isim generic ise URL'den türet
                     if self._is_generic_name(p.get('product_name','')):
                         derived = self._name_from_url(p.get('url',''))
                         if derived:
                             p['product_name'] = derived
+                    p['reason'] = self._reason(p, query, p['similarity_score'])
                     soft.append(p)
                 if len(soft) >= top_k:
                     break
             if soft:
                 return soft
-            # Son çare: ilk uygun olmayanlardan türetilmiş adlarla dön
             last_res = []
             for idx in np.argsort(similarities)[::-1][:top_k]:
                 p = self.products[idx].copy()
                 p['similarity_score'] = float(similarities[idx])
                 p['product_name'] = self._name_from_url(p.get('url','')) or p.get('product_name','')
+                p['reason'] = self._reason(p, query, p['similarity_score'])
                 last_res.append(p)
             return last_res
         return results
