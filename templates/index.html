@@ -326,6 +326,7 @@
                             <div class="product-desc">${p.short_desc || ''}</div>
                             <div class="product-actions">
                                 <a class="product-link" href="${p.url}" target="_blank">Detay</a>
+                                ${p.doc_url ? `<a class="product-link" style="background:#5e728f" href="${p.doc_url}" target="_blank">PDF</a>` : ''}
                             </div>
                         </div>
                     `;
