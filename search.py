@@ -57,11 +57,18 @@ class ProductSearch:
             return False
         if 'info@' in url:
             return False
-        banned = ('urun-gruplar', 'hammaddeler', 'haberler', 'etkinlik', 'teknik-', 'iletisim', 'bulten', 'nasil-dogru')
+        banned = ('urun-gruplar', 'urun-gruplari', 'hammaddeler', 'haberler', 'etkinlik', 'teknik-', 'iletisim', 'bulten', 'nasil-dogru')
         if any(b in url for b in banned):
             return False
         depth = [seg for seg in url.split('/') if seg and 'http' not in seg]
-        return len(depth) >= 4
+        # Bazı gerçek ürün linkleri 3 segment olabiliyor; son slug içinde 'maks' veya rakam/kimyasal ipucu varsa kabul et
+        if len(depth) >= 4:
+            return True
+        if len(depth) >= 3:
+            leaf = depth[-1]
+            if any(k in leaf for k in ('maks', 'antiskal', 'temizleyici', 'korozyon', 'biyosit', 'urunu', 'kimyasal')):
+                return True
+        return False
     
     def _normalize_products(self):
         normalized: List[Dict[str, Any]] = []
@@ -115,7 +122,7 @@ class ProductSearch:
             return []
         query_vector = self.vectorizer.transform([query.lower()])
         similarities = cosine_similarity(query_vector, self.product_vectors).flatten()
-        top_indices = np.argsort(similarities)[::-1][:max(top_k*2, top_k)]
+        top_indices = np.argsort(similarities)[::-1][:max(top_k*5, top_k)]
         results = []
         for idx in top_indices:
             if similarities[idx] > 0:
